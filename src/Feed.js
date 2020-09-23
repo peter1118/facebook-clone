@@ -1,21 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import "./Feed.css";
 import StoryReel from "./StoryReel";
 import MessageSender from "./MessageSender";
 import Post from "./Post";
+import db from "./firebase";
 
 function Feed() {
+	const [posts, setPosts] = useState([]);
+	useEffect(() => {
+		db.collection('posts').orderBy('timestamp', 'desc').
+			onSnapshot((snapshot) => (
+				setPosts(snapshot.docs.map(doc => ({ id: doc.id, data: doc.data() })))
+			));
+	}, []);
+
+
 return (
 	<div className="feed">
 		<StoryReel />
 		<MessageSender />		
-
-		<Post profilePic="https://www.flaticon.com/premium-icon/icons/svg/3054/3054163.svg" 
-			message='First feed..' timestamp='This is time stamp...' username='peter' 
-			image='https://cdn.pixabay.com/photo/2020/09/16/20/30/lighthouse-5577451__480.jpg'/>
-		<Post profilePic="https://www.flaticon.com/premium-icon/icons/svg/3054/3054163.svg" 
-			message='Second Feed...' timestamp='This is time stamp...' username='peter' />
-		<Post />
+		
+		{posts.map((post) => (
+			<Post key={post.id} profilePic={post.data.profilePic} message={post.data.message}
+				timestamp={post.data.timestamp} username={post.data.username} image={post.data.image} 
+		/>
+		))}
 	</div>
 )
 }
