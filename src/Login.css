@@ -4,16 +4,40 @@
 	height: 100vh;
 }
 
-.login > button {
+.login__main {
+}
+
+.login__signIn > button {
+	display: flex;
+	flex-direction: column;
 	width: 300px;
 	background-color: #2e81f4;
 	color: #eff2f5;
 	font-weight: 800;	
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
-.login > button:hover {
+.login__signIn > button:hover {
 	background-color: white;
 	color: #2e81f4;
+}
+/*
+.login__signUp > button  {
+	display: flex;
+	flex-direction: column;
+	width: 300px;
+	background-color: #64CD3C;
+	color: #eff2f5;
+	font-weight: 800;	
+}
+.login__signUp > button:hover {
+	background-color: white;
+	color: #64cd3c;
+}
+*/
+
+.login > button:hover {
 }
 
 .login > div > img {
@@ -21,7 +45,3 @@
 	height: 150px;
 }
 
-.login > div {
-	display: flex;
-	flex-direction: column;
-}
