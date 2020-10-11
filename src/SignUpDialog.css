@@ -1,14 +1,6 @@
 .Dialogtitle {
     padding: 3px;
 }
-.signUp > button {
-	display: flex;
-	flex-direction: column;
-	width: 300px;
-	background-color: #64CD3C;
-	color: #eff2f5;
-	font-weight: 800;	
-}
 
 .signUp__bottom > button {
 	display: flex;
@@ -19,17 +11,10 @@
 	font-weight: 800;	
         margin: 10px auto;
 }
-
-.signUp > button:hover {
-	background-color: white;
-	color: #64cd3c;
-}
-
 .signUp__bottom > button:hover {
 	background-color: white;
 	color: #64cd3c;
 }
-
 .signUp__form {
     margin: 5px;
     display: flex;
@@ -54,7 +39,6 @@
     font-size: small;
     text-align: center;
 }
-
 
 
 
