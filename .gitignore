@@ -4,7 +4,8 @@
 firebase.json
 /functions/*.json
 /.firebase
-*.json
+package.json
+package-lock.json
 
 # dependencies
 /functions/node_modules
