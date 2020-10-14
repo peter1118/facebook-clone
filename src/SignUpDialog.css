@@ -2,7 +2,36 @@
     padding: 3px;
 }
 
-.signUp__bottom > button {
+.signUp__form {
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.signUp__form > form{
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.signUp__form > form > textarea,
+.signUp__form > form > input {
+    margin: 8px 10px;
+    padding: 8px;
+    background-color: #f1f2f5;
+    border-color: #dcdcdc;
+    border: 2px
+}
+.signUp__form > form > textarea:focus,
+.signUp__form > form > input:focus {
+    outline: none;
+}
+.signUp__form > form > p {
+    font-size: small;
+    text-align: center;
+}
+
+.signUp__form > form > button {
 	display: flex;
 	flex-direction: column;
 	width: 300px;
@@ -11,34 +40,12 @@
 	font-weight: 800;	
         margin: 10px auto;
 }
-.signUp__bottom > button:hover {
+
+.signUp__form > form > button:hover {
 	background-color: white;
 	color: #64cd3c;
 }
-.signUp__form {
-    margin: 5px;
-    display: flex;
-    flex-direction: column;
-}
 
-.signUp__form > textarea,
-.signUp__form > input {
-    margin: 8px 10px;
-    padding: 8px;
-    background-color: #f1f2f5;
-    border-color: #dcdcdc;
-    border: 2px
-}
-
-.signUp__form > textarea:focus,
-.signUp__form > input:focus {
-    outline: none;
-}
-
-.signUp__bottom > p {
-    font-size: small;
-    text-align: center;
-}
 
 
 

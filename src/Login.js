@@ -12,6 +12,38 @@ import SignUpDialog from './SignUpDialog.js';
 function Login() {
     const [state, dispatch] = useStateValue();
     const [open, setOpen] = useState(false);
+    const [mail, setMail] = useState('');
+    const [pwd, setPassWord] = useState('');
+
+    var user = auth.currentUser;
+    var name, email, photoUrl, uid, emailVerified;
+
+    auth.onAuthStateChanged(function(user) {
+        if (user) {
+            name = user.displayName;
+            email = user.email;
+            photoUrl = user.photoURL;
+            emailVerified = user.emailVerified;
+            uid = user.uid;  
+            dispatch({
+                type: actionTypes.SET_USER,
+                user: user,
+            });
+//            return;
+            /*
+            auth.signOut().then(function() {
+            // Sign-out successful.
+            }).catch(function(error) {  
+            // An error happened.
+            });
+            */
+        } else {
+            // No user is signed in.
+        }
+    });
+
+    if (user != null) {
+    }
 
     const handleClickOpen = (e) => {
         e.preventDefault();
@@ -22,6 +54,7 @@ function Login() {
         setOpen(false);
     };
 
+    /*
     const signIn = () => {
         // sign in...
         auth.signInWithPopup(provider).then((result) => {
@@ -31,6 +64,20 @@ function Login() {
 	    })
         })
         .catch((error)=>alert(error.message));
+    }
+    */
+
+    const signInWithMail = (e) => {
+        e.preventDefault();
+
+        auth.signInWithEmailAndPassword(mail, pwd).catch(function(error) {
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              alert(errorMessage);
+        });
+
+        setMail("");
+        setPassWord("");
     }
 
 return (
@@ -50,11 +97,21 @@ return (
 			</div>
                         */}
                     <div className='login__main__top'>
-                        <input type='text' placeholder='아이디' id='login__form__id'/>
-                        <input type='text' placeholder='비밀번호' id='login__form__pwd'/>
-		        <Button type="submit" onClick={signIn} fullWidth={true}>
+                      <form>
+                        <input value={mail} 
+                            onChange={(e) => setMail(e.target.value)} 
+                            placeholder='메일 주소' 
+                            className='login__form' />
+                        <input value={pwd} 
+                            type="password"
+                            onChange={(e) => setPassWord(e.target.value)} 
+                            placeholder='비밀 번호'
+                            className='login__form' />
+		        <Button type="submit" onClick={signInWithMail} 
+                            fullWidth={true}>
                             로그인
 		        </Button>
+                      </form>
                     </div>
                     <div className='login__main__bottom'>
 		        <Button type="submit" onClick={handleClickOpen}>

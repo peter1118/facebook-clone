@@ -34,9 +34,16 @@ return (
 		<div className="messageSender__top">
 			<Avatar src={user.photoURL}/>
 			<form>
-				<input value={input} onChange={(e) => setInput(e.target.value)}
-					className="messageSender__input" placeholder={`whats on your mind, ${user.displayName}?`} />
-				<input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)}placeholder="image URL (Optional)" />
+				<input value={input}
+                                    onChange={(e) => setInput(e.target.value)}
+				    className="messageSender__input" 
+                                    placeholder=
+                                        {`whats on your mind, ${user.displayName}?`}
+                                />
+				<input value={imageUrl} 
+                                    onChange={(e) => setImageUrl(e.target.value)}
+                                    placeholder="image URL (Optional)" 
+                                />
 				<button onClick={handleSubmit} type="submit">
 					Hidden submit	
 				</button>

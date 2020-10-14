@@ -2,9 +2,12 @@
 # firebase
 .firebaserc
 firebase.json
+/functions/*.json
 /.firebase
+*.json
 
 # dependencies
+/functions/node_modules
 /node_modules
 /.pnp
 .pnp.js

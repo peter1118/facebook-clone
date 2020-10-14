@@ -14,14 +14,14 @@
     background-color: white;
 }
 
-.login__main__top {
+.login__main__top > form{
     display: flex;
     flex-direction: column;
     width: 100%;
     border-bottom: solid 1px #dcdcdc;
 }
 
-.login__main__top > button {
+.login__main__top > form > button {
     margin: 5px 0 30px;
     display: flex;
     flex-direction: column;
@@ -31,7 +31,7 @@
     font-weight: 800;	
 }
 
-.login__main__top > input {
+.login__main__top > form > input {
     margin: 5px 0;
     padding: 10px 10px;
     border-radius: 5px;
@@ -40,11 +40,11 @@
     font-size: 20px;
 }
 
-.login__main__top > input:focus {
+.login__main__top > form > input:focus {
     outline: none;
 }
 
-.login__main__top > button:hover {
+.login__main__top > form > button:hover {
 	background-color: white;
 	color: #2e81f4;
 }
