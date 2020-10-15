@@ -7,6 +7,7 @@ import "./SignUpDialog.css";
 import Button from '@material-ui/core/Button';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
+import db from "./firebase";
 
 function SignUpDialog(props) {
     const [mail, setMail] = useState('');
@@ -23,9 +24,6 @@ function SignUpDialog(props) {
     const signUp = (e) => {
         e.preventDefault();
 
-        console.log("mail :", mail);
-        console.log("pwd :", pwd);
-
         if (mail.length < 4) {
             alert('Please enter an email address.');
             return;
@@ -34,27 +32,41 @@ function SignUpDialog(props) {
             alert('Please enter a password.');
             return;
         }
-        auth.createUserWithEmailAndPassword(mail, pwd).catch(
-            function(error) {
-                // Handle Errors here.
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                // [START_EXCLUDE]
-                /*
-                if (errorCode == 'auth/weak-password') {
-                    //alert('The password is too weak.');
-                    alert(errorMessage);
-                } else {
-                    alert(errorMessage);
-                }
-                console.log(error);
-                */
-                alert(errorMessage);
-                // [END_EXCLUDE]
-            }
-        );
-    }
+        var docRef = db.collection("users").doc(mail);
 
+        docRef.get().then(function(doc) {
+            if (doc.exists) {
+                alert('You already requested sign-up');
+                return;
+            }
+            else {
+                db.collection('users').doc(mail).set({
+                    name: name,
+                    mail: mail,
+                    signUpMsg: msg,
+                    level: 0
+                }).then(function() {
+                    console.log("Document successfully written!");
+
+                    auth.createUserWithEmailAndPassword(mail, pwd).catch(
+                        function(error) {
+                            var errorCode = error.code;
+                            var errorMessage = error.message;
+                            alert(errorMessage);
+                        }
+                    );
+                })
+                .catch(function(error) {
+                    console.error("Error writing document: ", error);
+                    return;
+                });
+        
+            }
+         }).catch(function(error) {
+            console.log("Error getting document:", error);
+         });
+        handleClose();
+    }
 
     var actionCodeSettings = {
         // URL you want to redirect back to. The domain (www.example.com) for this
