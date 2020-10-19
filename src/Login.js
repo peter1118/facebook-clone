@@ -2,24 +2,14 @@ import React, { useState } from 'react';
 import "./Login.css";
 import logo from './logo.png';
 import Button from '@material-ui/core/Button';
-import { auth, provider } from "./firebase";
-import { actionTypes } from "./reducer";
-import { useStateValue } from "./StateProvider";
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
+import { auth } from "./firebase";
 import SignUpDialog from './SignUpDialog.js';
-import db from "./firebase";
 
 function Login() {
-    const [state, dispatch] = useStateValue();
+    //const [state, dispatch] = useStateValue();
     const [open, setOpen] = useState(false);
     const [mail, setMail] = useState('');
     const [pwd, setPassWord] = useState('');
-
-    const checkUserLevel = () => {
-
-        return -1;
-    }
 
     const handleClickOpen = (e) => {
         e.preventDefault();
@@ -30,7 +20,7 @@ function Login() {
         setOpen(false);
     };
 
-    /*
+    /* 구글 로그인 할 때 쓴거
     const signIn = () => {
         // sign in...
         auth.signInWithPopup(provider).then((result) => {
@@ -48,13 +38,8 @@ function Login() {
         //setMail(document.getElementById('loginMail'));
         //setPassWord(document.getElementById('loginPWD'));
         auth.signInWithEmailAndPassword(mail, pwd).catch(function(error) {
-              var errorCode = error.code;
               var errorMessage = error.message;
               alert(errorMessage);
- /*             dispatch({
-                type: actionTypes.SET_USER,
-                user: result.user,
-	      });*/
         });
         setMail("");
         setPassWord("");

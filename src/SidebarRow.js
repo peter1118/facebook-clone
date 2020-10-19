@@ -1,7 +1,6 @@
 import React from 'react';
 import "./SidebarRow.css";
-import { Avatar, IconButton } from "@material-ui/core";
-import logo from "./logo.png"
+import { Avatar } from "@material-ui/core";
 
 function SidebarRow({src, Icon, title}) {
 	return (
@@ -10,8 +9,6 @@ function SidebarRow({src, Icon, title}) {
 			{Icon && <Icon />}
 			
 			<h4>{title}</h4>
-
-
 		</div>
 	)
 }

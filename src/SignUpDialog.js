@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { auth, provider } from "./firebase";
-import { actionTypes } from "./reducer";
-import { useStateValue } from "./StateProvider";
+import { auth } from "./firebase";
 import "./SignUpDialog.css";
 
 import Button from '@material-ui/core/Button';
@@ -50,15 +48,14 @@ function SignUpDialog(props) {
 
                     auth.createUserWithEmailAndPassword(mail, pwd).catch(
                         function(error) {
-                            var errorCode = error.code;
                             var errorMessage = error.message;
                             alert(errorMessage);
+                            console.log("after user created...");
                         }
                     );
                 })
                 .catch(function(error) {
                     console.error("Error writing document: ", error);
-                    return;
                 });
         
             }
@@ -67,17 +64,6 @@ function SignUpDialog(props) {
          });
         handleClose();
     }
-
-    var actionCodeSettings = {
-        // URL you want to redirect back to. The domain (www.example.com) for this
-        // URL must be whitelisted in the Firebase Console.
-        //url: 'vine-church-f82a0.firebaseapp.com',
-        url: 'localhost:3000',
-        // This must be true.
-        handleCodeInApp: true,
-        //dynamicLinkDomain: 'vine-church-f82a0.firebaseapp.com'
-        dynamicLinkDomain: 'localhost:3000'
-    };
 
     return (
             <Dialog onClose={handleClose} aria-labelledby="Sign Up" open={open} fullWidth={true} maxWidth={'xs'}>

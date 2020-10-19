@@ -1,9 +1,8 @@
 import React from 'react';
 import "./Story.css";
-import { Avatar, IconButton } from "@material-ui/core";
+import { Avatar } from "@material-ui/core";
 
 function Story({ image, profileSrc, title }) {
-	const bg = {image};
 
 return (
 	<div style={{backgroundImage: 'url(' + require('./img1.png') + ')'}} className='story'>

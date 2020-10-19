@@ -1,7 +1,6 @@
 import React from 'react';
 import "./StoryReel.css";
 import Story from './Story';
-import img1 from './img1.png';
 
 function StoryReel() {
 return (

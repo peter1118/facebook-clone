@@ -1,5 +1,7 @@
+import { initUser } from './firebase';
+
 export const initialState = {
-	user: null,
+	user: {initUser},
 };
 
 export const actionTypes = {
