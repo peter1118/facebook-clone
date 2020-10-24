@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import "./Login.css";
 import logo from './logo.png';
 import Button from '@material-ui/core/Button';
-import { auth } from "./firebase";
+import db, {auth} from "./firebase";
 import SignUpDialog from './SignUpDialog.js';
+import {useStateValue} from "./StateProvider";
+import {actionTypes} from "./reducer";
+
+//const [dispatch] = useStateValue();
+auth.onAuthStateChanged(function(user) {
+    /*
+    dispatch({
+        type: actionTypes.SET_USER,
+        user: user,
+    })
+    */
+    console.log("on auth changed...");
+});
 
 function Login() {
-    //const [state, dispatch] = useStateValue();
     const [open, setOpen] = useState(false);
     const [mail, setMail] = useState('');
     const [pwd, setPassWord] = useState('');
@@ -35,15 +47,29 @@ function Login() {
 
     const signInWithMail = (e) => {
         e.preventDefault();
-        //setMail(document.getElementById('loginMail'));
-        //setPassWord(document.getElementById('loginPWD'));
-        auth.signInWithEmailAndPassword(mail, pwd).catch(function(error) {
-              var errorMessage = error.message;
-              alert(errorMessage);
-        });
+        console.log(mail);
+        auth.signInWithEmailAndPassword(mail, pwd)
+            .then(function(user) {
+                //const mail = user.email;
+                db.collection("users").doc(mail).get()
+                    .then(function(doc) {
+                        var userLevel = doc.data().level;
+                        if (userLevel === 0) {
+                            alert('관리자의 가입 승인이 필요합니다.');
+                            auth.signOut();
+                            console.log("log in ok, but not allowed...");
+                        }
+                    });
+                console.log("logged in!!!");
+            })
+            .catch(function(error) {
+                var errorMessage = error.message;
+                alert(errorMessage);
+            });
         setMail("");
         setPassWord("");
     }
+
 
 return (
 	<div className='login'>
@@ -89,6 +115,7 @@ return (
                 <SignUpDialog open={open} onClose={handleClose} />
 	</div>
 )
+
 }
 
 export default Login;

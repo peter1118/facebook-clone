@@ -10,17 +10,14 @@ function App() {
   const [{ user }] = useStateValue();
   return (
     <div className="app">
-		{!user ? (
-			<Login />
-		) : ( <>
-
-		<Header />
-		<div className="app__body">
-			<Sidebar />
-			<Feed />
+        {!user ? (<Login />) : ( <>
+            <Header />
+	        <div className="app__body">
+		    <Sidebar />
+		    <Feed />
 		</div>
-
-		</>)}		
+	    </>
+        )}		
     </div>
   );
 }
