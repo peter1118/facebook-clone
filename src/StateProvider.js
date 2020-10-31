@@ -1,12 +1,16 @@
 import React, { createContext, useContext, useReducer } from 'react';
+import reducer, {initialState} from "./reducer";
 
-export const StateContext = createContext();
+console.log("StateProvider! ");
+
+export const UserContext = createContext({initialState});
 
 export const StateProvider = ({ reducer, initialState, children }) => (
-	<StateContext.Provider value={useReducer(reducer, initialState)}>
+	<UserContext.Provider value={useReducer(reducer, initialState)}>
 		{children}
-	</StateContext.Provider>
+	</UserContext.Provider>
 );
 
-export const useStateValue = () => useContext(StateContext);
+export const useUserContext = () => useContext(UserContext);
+console.log("StateProvider ended! ");
 

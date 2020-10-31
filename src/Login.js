@@ -1,24 +1,31 @@
-import React, {useState} from 'react';
+import React, {useState, useReducer} from 'react';
 import "./Login.css";
 import logo from './logo.png';
 import Button from '@material-ui/core/Button';
 import db, {auth} from "./firebase";
 import SignUpDialog from './SignUpDialog.js';
-import {useStateValue} from "./StateProvider";
-import {actionTypes} from "./reducer";
+import {useUserContext} from "./StateProvider";
+import {actionTypes,reducer} from "./reducer";
 
-//const [dispatch] = useStateValue();
+//const [userContext, dispatch] = useUserContext();
+//console.log("!!!!    " + this.state);
+/*
 auth.onAuthStateChanged(function(user) {
-    /*
-    dispatch({
-        type: actionTypes.SET_USER,
-        user: user,
-    })
-    */
-    console.log("on auth changed...");
+    if(user) {
+        console.log("on auth changed...yes user");
+        dispatch({
+            type: actionTypes.SET_USER,
+            user: user,
+        })
+    }
+    else {
+        console.log("on auth changed...no user");
+    }
 });
+        */
 
 function Login() {
+    const [state, dispatch] = useUserContext();
     const [open, setOpen] = useState(false);
     const [mail, setMail] = useState('');
     const [pwd, setPassWord] = useState('');
@@ -49,7 +56,7 @@ function Login() {
         e.preventDefault();
         console.log(mail);
         auth.signInWithEmailAndPassword(mail, pwd)
-            .then(function(user) {
+            .then((result) => {
                 //const mail = user.email;
                 db.collection("users").doc(mail).get()
                     .then(function(doc) {
@@ -61,6 +68,10 @@ function Login() {
                         }
                     });
                 console.log("logged in!!!");
+                dispatch({
+                    type: actionTypes.SET_USER,
+                    user: result.user,
+                });
             })
             .catch(function(error) {
                 var errorMessage = error.message;
