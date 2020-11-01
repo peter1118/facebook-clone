@@ -1,31 +1,15 @@
-import React, {useState, useReducer} from 'react';
+import React, {useState} from 'react';
 import "./Login.css";
 import logo from './logo.png';
 import Button from '@material-ui/core/Button';
 import db, {auth} from "./firebase";
 import SignUpDialog from './SignUpDialog.js';
-import {useUserContext} from "./StateProvider";
-import {actionTypes,reducer} from "./reducer";
+import {useUserContext} from "./UserContextProvider";
 
-//const [userContext, dispatch] = useUserContext();
-//console.log("!!!!    " + this.state);
-/*
-auth.onAuthStateChanged(function(user) {
-    if(user) {
-        console.log("on auth changed...yes user");
-        dispatch({
-            type: actionTypes.SET_USER,
-            user: user,
-        })
-    }
-    else {
-        console.log("on auth changed...no user");
-    }
-});
-        */
 
 function Login() {
-    const [state, dispatch] = useUserContext();
+    const {user} = useUserContext();
+    //const updateUser = useUserUpdateContext();
     const [open, setOpen] = useState(false);
     const [mail, setMail] = useState('');
     const [pwd, setPassWord] = useState('');
@@ -68,10 +52,6 @@ function Login() {
                         }
                     });
                 console.log("logged in!!!");
-                dispatch({
-                    type: actionTypes.SET_USER,
-                    user: result.user,
-                });
             })
             .catch(function(error) {
                 var errorMessage = error.message;

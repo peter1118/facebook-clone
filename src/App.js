@@ -4,13 +4,23 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Feed from "./Feed";
 import Login from "./Login";
-import {useUserContext} from "./StateProvider";
-import {auth} from "./firebase";
+import {useUserContext} from "./UserContextProvider";
 
 function App() {
-    var [state, dispath] = useUserContext();
-    const user = auth.currentUser == null ? state : auth.getCurrentUser;
-    if (auth.currentUser == null) {
+    const {user} = useUserContext();
+    console.log("?? App.js : " + user);
+    //if (auth.currentUser == null) {
+    /*
+    if (isAuthChecking)  {
+        return (
+            <>
+                <h1> Loading.. </h1>
+            </>
+        )
+    }
+    */
+
+    if (user == null) {
         return (
             <div className="app"> <Login /> </div>
         );

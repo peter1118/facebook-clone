@@ -4,12 +4,13 @@ import { Avatar } from "@material-ui/core";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import InsertEmotionIcon from "@material-ui/icons/InsertEmoticon";
-import { useUserContext } from "./StateProvider";
 import db from "./firebase";
 import firebase from "firebase";
+import {useUserContext} from "./UserContextProvider";
 
 function MessageSender() {
-        const [{user}, dispatch] = useUserContext();
+        const {user} = useUserContext();
+        console.log("in MsgSender!!" + user);
 	const [input, setInput] = useState('');
 	const [imageUrl, setImageUrl] = useState('');
 

@@ -12,10 +12,10 @@ import AddIcon from '@material-ui/icons/Add';
 import ForumIcon from '@material-ui/icons/Forum';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { useUserContext } from "./StateProvider";
+import {useUserContext} from "./UserContextProvider";
 
 function Header() {
-        const [{user}, dispatch] = useUserContext();
+        const {user} = useUserContext();
 
 	return (
 	<div className="header">
