@@ -10,7 +10,7 @@ import {useUserContext} from "./UserContextProvider";
 
 function MessageSender() {
         const {user} = useUserContext();
-        console.log("in MsgSender!!" + user);
+        console.log("in MsgSender!!");
 	const [input, setInput] = useState('');
 	const [imageUrl, setImageUrl] = useState('');
 

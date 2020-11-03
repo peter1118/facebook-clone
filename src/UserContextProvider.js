@@ -1,50 +1,38 @@
-import React, {useEffect} from 'react';
-import { initUser, auth } from "./firebase";
+import React, {useState} from 'react';
+import { auth } from "./firebase";
 
-const UserContext = React.createContext();
-//const UserUpdateContext = React.createContext();
+const UserContext = React.createContext({
+    user: {},
+    setUser: () => {}
+});
 
 export function useUserContext() {
     return React.useContext(UserContext);
 }
-/*
-export function useUserUpdateContext() {
-    return React.useContext(UserUpdateContext);
-}
-*/
 
 export default function UserContextProvider({children}) {
-    const [user, setUser] = React.useState({});
-    var isChecked = false;
-
-    function updateUser(updateUser) {
-        console.log("in updateUser!");
-        //console.log(updateUser);
-        isChecked = true;
-        setUser(updateUser);
-        console.log(isChecked);
-        console.log("after update!");
-        //console.log(user);
-    }
-    auth.onAuthStateChanged(function(user) {
-        console.log("on auth changed..");
-        if(isChecked) {
-            console.log("true...");
+    const [user, setUser] = useState({});
+    const value = { user, setUser };
+    auth.onAuthStateChanged(function(thisUser) {
+        console.log("on auth changed!!! : ");
+        if(user && thisUser) {
+            console.log("yes user, this user also yes");
             return;
         }
-        if(user) {
-            console.log("on auth changed...yes user");
-            updateUser(user);                
+        else if(!user && !thisUser) {
+            console.log("no user, this user also no");
+            return;
         }
         else {
-            console.log("on auth changed...no user");
+            console.log("new user");
+            console.log(thisUser);
+            setUser(thisUser);                
         }
+
     });
-    console.log("provider!");
     return (
-        <UserContext.Provider value={user}>
+        <UserContext.Provider value={value}>
                 {children}
         </UserContext.Provider>
     )
 }
-

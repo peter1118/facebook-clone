@@ -8,7 +8,8 @@ import {useUserContext} from "./UserContextProvider";
 
 function App() {
     const {user} = useUserContext();
-    console.log("?? App.js : " + user);
+    console.log("?? in App.js ,, user ? ");
+    console.log({user});
     //if (auth.currentUser == null) {
     /*
     if (isAuthChecking)  {

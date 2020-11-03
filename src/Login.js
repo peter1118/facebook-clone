@@ -4,12 +4,9 @@ import logo from './logo.png';
 import Button from '@material-ui/core/Button';
 import db, {auth} from "./firebase";
 import SignUpDialog from './SignUpDialog.js';
-import {useUserContext} from "./UserContextProvider";
 
 
 function Login() {
-    const {user} = useUserContext();
-    //const updateUser = useUserUpdateContext();
     const [open, setOpen] = useState(false);
     const [mail, setMail] = useState('');
     const [pwd, setPassWord] = useState('');
@@ -36,6 +33,7 @@ function Login() {
     }
     */
 
+    //ToDo : 관리자 승인 관련 로직은 onAuthChanged로 옮기자..
     const signInWithMail = (e) => {
         e.preventDefault();
         console.log(mail);
