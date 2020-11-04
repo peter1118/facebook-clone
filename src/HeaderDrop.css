@@ -1,0 +1,12 @@
+.headerDrop {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    width: 300px;
+    background-color: white;
+    box-shadow: 0 0 10px #dcdcdc;
+    border-radius: 15px;
+    overflow: hidden;
+    padding: 10px;
+}

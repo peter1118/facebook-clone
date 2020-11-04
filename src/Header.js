@@ -12,10 +12,16 @@ import AddIcon from '@material-ui/icons/Add';
 import ForumIcon from '@material-ui/icons/Forum';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import {useUserContext} from "./UserContextProvider";
+import HeaderDrop from "./HeaderDrop";
 
 function Header() {
         const {user} = useUserContext();
+        const [isDropped, setIsDropped] = React.useState(false);
+        const onExpandClicked = ()=>{
+            setIsDropped(!isDropped);
+        }
 
 	return (
 	<div className="header">
@@ -60,9 +66,14 @@ function Header() {
 			<IconButton>
 				<NotificationsActiveIcon />
 			</IconButton>
-			<IconButton>
-				<ExpandMoreIcon />
-			</IconButton>
+                        <IconButton onClick={onExpandClicked}>
+                            {!isDropped ? (
+			        <ExpandMoreIcon />
+                            ) : (
+                                <ExpandLessIcon />
+                            )}
+                        </IconButton>
+                        {isDropped && <HeaderDrop />}
 		</div>
 	</div>
 	)
