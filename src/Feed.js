@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { createRef, useState, useEffect, useRef } from 'react';
 import "./Feed.css";
 import StoryReel from "./StoryReel";
 import MessageSender from "./MessageSender";
@@ -6,41 +6,17 @@ import Post from "./Post";
 import db from "./firebase";
 
 function Feed() {
+        const POST_AMOUNT = 5;
 	const [posts, setPosts] = useState([]);
-        //ToDo, 
-        //shouldAddPost 초기값 false여야 하는지 확인!
-        const [shouldAddPost, setShouldAddPost] = useState(true);
-        const [target, setTarget] = useState(null);
+	const [isFirstLoad, setIsFirstLoad] = useState(true);
+        //const [target, setTarget] = useState(() => createRef());
+        const target = useRef();
+        const [timeBoundary, setTimeBoundary] = useState(null); //이 기준 시간보다 오래된 n개의 게시물 가져올 예정
 
         const observerCallback = () => {
-            if (shouldAddPost === true){
-                alert('error');
-            }
-            else {
-                setShouldAddPost(true);
-            }
+            console.log("observer callback!!");
+            getPost();
         }
-
-        const addPost = () => {
-            //ToDo, 
-            //아래 쿼리를 어떻게 바꿔야 할까?
-	    db.collection('posts').orderBy('timestamp', 'desc')
-	        .onSnapshot((snapshot) => (
-	            setPosts(snapshot.docs.map(
-                        doc => ({ id: doc.id, data: doc.data() })))
-		));
-        }
-
-        useEffect(() => {
-            //ToDo, 
-            //add 된 포스트를 setTarget(post)
-            //useRef를 써야될듯...?
-        },[posts]);
-
-        useEffect(() => {
-            shouldAddPost && addPost();
-        },[target]);
-
         /*
         let options = {
             root: ???,
@@ -49,18 +25,36 @@ function Feed() {
         }
         */
         let observer = new IntersectionObserver(observerCallback);
-
+        //ToDo, 
+        //observe 동작하게 만들어라!
+        //observer.observe(target.current);
+        const setDocs = (doc) => {
+            setTimeBoundary(doc.data.timestamp);
+            return { id: doc.id, data: doc.data() };
+        };
+        const getPost = () => {
+            var postsRef = db.collection('posts');
+	    postsRef.where('timestamp', '<', timeBoundary).orderBy('timestamp', 'desc').limit(POST_AMOUNT)
+                .get().then(function(snapshot) {
+	            setPosts(snapshot.docs.map(
+                            //doc => ({ id: doc.id, data: doc.data() })
+                            setDocs
+                        )
+                    );
+                });
+        }
 	useEffect(() => {
-		db.collection('posts').orderBy('timestamp', 'desc')
-			.onSnapshot((snapshot) => (
-				setPosts(snapshot.docs.map(
-                                    doc => ({ id: doc.id, data: doc.data() })))
-			));
+            if(!isFirstLoad) return;        
+	    db.collection('posts').orderBy('timestamp', 'desc')
+		.onSnapshot((snapshot) => (
+			setPosts(snapshot.docs.map(
+                               doc => ({ id: doc.id, data: doc.data() })))
+		));
+            setIsFirstLoad(false);
 	}, []);
 
-
 return (
-	<div className="feed">
+	<div ref={target} className="feed">
 		<StoryReel />
 		<MessageSender />		
 		
