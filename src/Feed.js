@@ -6,7 +6,7 @@ import Post from "./Post";
 import db from "./firebase";
 
 function Feed() {
-        const POST_AMOUNT = 2;
+        const POST_AMOUNT = 5;
 	const [posts, setPosts] = useState([]);
 	const [isFirstLoad, setIsFirstLoad] = useState(true);
         //const [target, setTarget] = useState(() => createRef());
@@ -25,29 +25,22 @@ function Feed() {
             threshold: 1.0
         }
         */
-        let observer = new IntersectionObserver(observerCallback,{ threshold: 0.8 });
         const getPost = () => {
             var postsRef = db.collection('posts');
 	    postsRef.where('timestamp', '<', timeBoundary).orderBy('timestamp', 'desc').limit(POST_AMOUNT) //값 비교 가능?
                 .get().then(function(querySnapshot) {
                     /*
-	            setPosts(docs.map(
-                            (doc) => {
-                                console.log("in set doc! time? : " + timeBoundary);
-                                console.log(doc.data);
-                                setTimeBoundary(doc.data.timestamp);
-                                return { id: doc.id, data: doc.data() };
-                            }
-                        )
-                        */
+                    var arr = [];
                     querySnapshot.forEach((doc)=>{
                         setTimeBoundary(doc.data.timestamp); //todo : 마지막 놈의 시간으로만 업데이트 해주기
-                        console.log(doc.id);
-                        var tmpArr = posts;
-                        //setPosts(posts.push({id: doc.id, data: doc.data()})); //setPost 한번씩해도 append가 계속 안되면 이거 써
-                        tmpArr.push({id: doc.id, data: doc.data()});
-                        setPosts(tmpArr);
-                        console.log("length : " + posts.length); //Todo, 201126, 2까지 잘 늘어나는데 첫번째 놈만 렌더 됨 why???
+                        arr.push({id: doc.id, data: doc.data()})
+                    });
+                    */ //이부분은 원래 되던 부분이고, 이제 한개마다 setPosts해보자
+
+                    querySnapshot.forEach((doc)=>{
+                        setTimeBoundary(doc.data.timestamp); //todo : 마지막 놈의 시간으로만 업데이트 해주기
+                        console.log("??" + timeBoundary) ;   
+                        setPosts(prevArr => [...prevArr,{id: doc.id, data: doc.data()}]);
                     });
                 });
         }
@@ -63,9 +56,11 @@ function Feed() {
             setIsFirstLoad(false);
 	}, []);
         useEffect(()=>{
-            //ToDo, 
-            //observe 동작하게 만들어라!
-            observer.observe(target.current);
+            let observer;
+            if (target.current) {
+                observer = new IntersectionObserver(observerCallback,{ threshold: 1 });
+                observer.observe(target.current);
+            }
         }, []);
 
 return (
@@ -81,6 +76,7 @@ return (
                             username={post.data.username} image={post.data.image} 
 		        />
 		))}
+            <div className="feed_loading" ref={target}></div>
 	</div>
 )
 
