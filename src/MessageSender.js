@@ -9,10 +9,11 @@ import firebase from "firebase";
 import {useUserContext} from "./UserContextProvider";
 
 function MessageSender() {
-        const {user} = useUserContext();
-        console.log("in MsgSender!!");
+    const {user} = useUserContext();
 	const [input, setInput] = useState('');
 	const [imageUrl, setImageUrl] = useState('');
+	const PIC = "https://lh3.googleusercontent.com/-LoShyN9XEB8/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucll28HSux8fLYUiUFzBJATRHStt4w/photo.jpg";
+	const NAME = "tester";
 
 const handleSubmit = (e) => {
 	e.preventDefault();
@@ -20,8 +21,8 @@ const handleSubmit = (e) => {
 	db.collection('posts').add({
 		message: input,
 		timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-		profilePic: user.photoURL,
-		username: user.displayName,
+		profilePic: (user.phtoURL === undefined) ? PIC : user.photoURL,
+		username: (user.displayName === undefined) ? NAME : user.displayName,
 		image: imageUrl
 	});
 

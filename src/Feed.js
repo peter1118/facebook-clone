@@ -4,79 +4,70 @@ import StoryReel from "./StoryReel";
 import MessageSender from "./MessageSender";
 import Post from "./Post";
 import db from "./firebase";
+import useIntersect from "./UseIntersect.js";
 
 function Feed() {
-        const POST_AMOUNT = 5;
+	const FETCH_COUNT = 10;
+	var isFirstLoad = true;
+
 	const [posts, setPosts] = useState([]);
-	const [isFirstLoad, setIsFirstLoad] = useState(true);
-        //const [target, setTarget] = useState(() => createRef());
-        const target = useRef();
-        const [timeBoundary, setTimeBoundary] = useState(new Date()); //이 기준 시간보다 오래된 n개의 게시물 가져올 예정
+	const [isLoading, setIsLoading] = useState(false);
+	const [target, setTarget] = useState();
+	const [_, setRef] = useIntersect(async (entry, observer) => {
+		observer.unobserve(entry.target);
+		await fetchPost();
+		observer.observe(entry.target);
+	}, {});
+	const postRef = db.collection('posts');
+	const firstDocs = postRef.orderBy('timestamp', 'desc').limit(FETCH_COUNT); //값 비교 가능?
+	/*
+	var lastDoc = null;
+	const nextFetch = myQuery.startAfter(lastDoc);
+	*/
+	var querySnapshot;
+	var lastVisible;
+	
+	const fetchPost = async () => {
+		if (isLoading) return;
+		setIsLoading(true);
+		if(isFirstLoad) {
+			querySnapshot = await firstDocs.get();
+			isFirstLoad = false;
+		}
+		else {
+			querySnapshot = await postRef.orderBy('timestamp', 'desc').startAfter(lastVisible).limit(FETCH_COUNT).get();
+		}
+		if (querySnapshot.docs.length == 0) return;
+		lastVisible = querySnapshot.docs[querySnapshot.docs.length-1];
+		querySnapshot.forEach(doc => {
+			setPosts(prevArr => [...prevArr, {id:doc.id, data: doc.data()}]);
+			console.log(doc.data().profilePic);
+		});
+		setIsLoading(false);
+	}
 
-        const observerCallback = () => {
-            console.log("observer callback!!");
-            setPosts([]);
-            getPost();
-        }
-        /*
-        let options = {
-            root: ???,
-            rootMargin: '0px',
-            threshold: 1.0
-        }
-        */
-        const getPost = () => {
-            var postsRef = db.collection('posts');
-	    postsRef.where('timestamp', '<', timeBoundary).orderBy('timestamp', 'desc').limit(POST_AMOUNT) //값 비교 가능?
-                .get().then(function(querySnapshot) {
-                    /*
-                    var arr = [];
-                    querySnapshot.forEach((doc)=>{
-                        setTimeBoundary(doc.data.timestamp); //todo : 마지막 놈의 시간으로만 업데이트 해주기
-                        arr.push({id: doc.id, data: doc.data()})
-                    });
-                    */ //이부분은 원래 되던 부분이고, 이제 한개마다 setPosts해보자
-
-                    querySnapshot.forEach((doc)=>{
-                        setTimeBoundary(doc.data.timestamp); //todo : 마지막 놈의 시간으로만 업데이트 해주기
-                        console.log("??" + timeBoundary) ;   
-                        setPosts(prevArr => [...prevArr,{id: doc.id, data: doc.data()}]);
-                    });
-                });
-        }
-	useEffect(() => {
-            if(!isFirstLoad) return;        
-            /* original!
-	    db.collection('posts').orderBy('timestamp', 'desc')
-		.onSnapshot((snapshot) => (
-			setPosts(snapshot.docs.map(
-                               doc => ({ id: doc.id, data: doc.data() })))
-		));
-            */
-            setIsFirstLoad(false);
-	}, []);
-        useEffect(()=>{
-            let observer;
-            if (target.current) {
-                observer = new IntersectionObserver(observerCallback,{ threshold: 1 });
-                observer.observe(target.current);
-            }
-        }, []);
+	useEffect(()=>{
+		//fetchPost();
+		//isFirstLoad = false;
+	},[]);
 
 return (
-	<div className="feed" ref={target}>
+	<div className="feed" >
 		<StoryReel />
 		<MessageSender />		
 		
 		{posts.map((post) => (
 			<Post key={post.id} 
-                            profilePic={post.data.profilePic} 
-                            message={post.data.message} 
-                            timestamp={post.data.timestamp} 
-                            username={post.data.username} image={post.data.image} 
-		        />
+                profilePic={post.data.profilePic} 
+                message={post.data.message} 
+                timestamp={post.data.timestamp} 
+				username={post.data.username} 
+				image={post.data.image} 
+		    />
 		))}
-            <div className="feed_loading" ref={target}></div>
+		<div ref={setRef} className="feed_loading">
+        	{isLoading && "Loading..."}
+		</div>
 	</div>
 )
 
