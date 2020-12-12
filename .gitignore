@@ -2,10 +2,9 @@
 # firebase
 .firebaserc
 firebase.json
-/functions/*.json
 /.firebase
-package.json
-package-lock.json
+*.json
+functions
 
 # dependencies
 /functions/node_modules
